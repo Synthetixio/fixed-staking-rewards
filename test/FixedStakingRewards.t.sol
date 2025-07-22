@@ -34,8 +34,6 @@ contract MockChainlinkAggregator is IChainlinkAggregator {
     bool public allRoundDataShouldRevert;
     bool public latestRoundDataShouldRevert;
 
-    constructor() public {}
-
     // Mock setup function
     function setLatestAnswer(int256 answer, uint256 timestamp) external {
         roundId++;
@@ -203,7 +201,7 @@ contract FixedStakingRewardsTest is Test {
                              VIEW FUNCTION TESTS
     //////////////////////////////////////////////////////////////*/
 
-    function test_RewardPerToken_WithZeroTotalSupply() public {
+    function test_RewardPerToken_WithZeroTotalSupply() public view {
         uint256 result = stakingRewards.rewardPerToken();
         assertEq(result, 0);
     }
@@ -227,7 +225,7 @@ contract FixedStakingRewardsTest is Test {
         assertEq(result, expected);
     }
 
-    function test_Earned_WithoutStaking() public {
+    function test_Earned_WithoutStaking() public view {
         uint256 result = stakingRewards.earned(user1);
         assertEq(result, 0);
     }
@@ -754,8 +752,8 @@ contract FixedStakingRewardsTest is Test {
         // Set target APY
         stakingRewards.setRewardYieldForYear(1e18);
 
-        // Set aggregator with stale data (2 hours old)
-        uint256 staleTimestamp = block.timestamp - 2 hours;
+        // Set aggregator with stale data (2 days old)
+        uint256 staleTimestamp = block.timestamp - 2 days;
         mockAggregator.setLatestAnswer(1e8 / 2, staleTimestamp);
 
         // Rebalance should revert with InvalidPriceFeed
@@ -763,12 +761,12 @@ contract FixedStakingRewardsTest is Test {
         stakingRewards.rebalance();
     }
 
-    function test_Rebalance_RevertWhen_PriceFeedIsStaleExactly1Hour() public {
+    function test_Rebalance_RevertWhen_PriceFeedIsStaleExactly1Day1Hour() public {
         // Set target APY
         stakingRewards.setRewardYieldForYear(1e18);
 
-        // Set aggregator with data exactly 1 hour old (should still revert)
-        uint256 staleTimestamp = block.timestamp - 1 hours - 1;
+        // Set aggregator with data exactly 1 day + 1 hour old (should still revert)
+        uint256 staleTimestamp = block.timestamp - 1 days - 1 hours - 1;
         mockAggregator.setLatestAnswer(1e8 / 2, staleTimestamp);
 
         // Rebalance should revert with InvalidPriceFeed

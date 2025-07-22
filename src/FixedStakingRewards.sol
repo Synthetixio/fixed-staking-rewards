@@ -154,7 +154,7 @@ contract FixedStakingRewards is IStakingRewards, ERC20, ReentrancyGuard, Ownable
     /* ========== INTERNAL FUNCTIONS ========== */
     function _rebalance() internal {
         (, int256 currentRewardTokenRate,, uint256 updateTime,) = rewardsTokenRateAggregator.latestRoundData();
-        if (currentRewardTokenRate == 0 || updateTime < block.timestamp - 1 hours) {
+        if (currentRewardTokenRate == 0 || updateTime < block.timestamp - 1 days - 1 hours) {
             revert InvalidPriceFeed(updateTime, currentRewardTokenRate);
         }
         rewardRate = targetRewardApy * 1e18 / (uint256(currentRewardTokenRate) * 10 ** (18 - rewardsTokenRateDecimals))
