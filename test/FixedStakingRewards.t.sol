@@ -280,7 +280,7 @@ contract FixedStakingRewardsTest is Test {
         // Set up rewards so staking is allowed
         stakingRewards.setRewardYieldForYear(1e18);
         stakingRewards.supplyRewards(1000e18);
-        
+
         // Add user to whitelist
         stakingRewards.addToWhitelist(user1);
 
@@ -301,7 +301,7 @@ contract FixedStakingRewardsTest is Test {
     function test_Stake_RevertWhen_AmountIsZero() public {
         // Add user to whitelist first
         stakingRewards.addToWhitelist(user1);
-        
+
         vm.startPrank(user1);
         stakingToken.approve(address(stakingRewards), 0);
 
@@ -313,7 +313,7 @@ contract FixedStakingRewardsTest is Test {
     function test_Stake_RevertWhen_InsufficientRewards() public {
         // Add user to whitelist first
         stakingRewards.addToWhitelist(user1);
-        
+
         stakingRewards.setRewardYieldForYear(1e18);
         stakingRewards.supplyRewards(1e18);
 
@@ -521,7 +521,7 @@ contract FixedStakingRewardsTest is Test {
     function test_GetReward_RevertWhen_BeforeRewardsAvailableDate() public {
         // Add user to whitelist first
         stakingRewards.addToWhitelist(user1);
-        
+
         vm.startPrank(user1);
         vm.expectRevert(
             abi.encodeWithSelector(

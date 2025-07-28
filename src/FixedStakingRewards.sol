@@ -75,7 +75,14 @@ contract FixedStakingRewards is IStakingRewards, ERC20Pausable, ReentrancyGuard,
 
     /* ========== MUTATIVE FUNCTIONS ========== */
 
-    function stake(uint256 amount) external override nonReentrant updateReward(msg.sender) onlyWhitelisted whenNotPaused {
+    function stake(uint256 amount)
+        external
+        override
+        nonReentrant
+        updateReward(msg.sender)
+        onlyWhitelisted
+        whenNotPaused
+    {
         if (amount == 0) revert CannotStakeZero();
 
         _rebalance();
@@ -90,7 +97,14 @@ contract FixedStakingRewards is IStakingRewards, ERC20Pausable, ReentrancyGuard,
         emit Staked(msg.sender, amount);
     }
 
-    function withdraw(uint256 amount) public override nonReentrant updateReward(msg.sender) onlyWhitelisted whenNotPaused {
+    function withdraw(uint256 amount)
+        public
+        override
+        nonReentrant
+        updateReward(msg.sender)
+        onlyWhitelisted
+        whenNotPaused
+    {
         if (block.timestamp < rewardsAvailableDate) {
             revert RewardsNotAvailableYet(block.timestamp, rewardsAvailableDate);
         }
